@@ -655,8 +655,9 @@
 
 <script>
   /* ---------- COUNTDOWN ---------- */
-  // ⚠️ SET YOUR CEREMONY DATE & TIME HERE (local time)
-  const ceremonyDate = new Date("2026-10-30T18:00:00").getTime();
+  // Keep the countdown hidden until the final ceremony date is announced.
+  const countdownEl = document.getElementById('countdown');
+  const ceremonyDate = null; // set to a valid timestamp when the date is confirmed
 
   const cd = {
     days: document.getElementById('days'),
@@ -668,10 +669,8 @@
   function pad(n) { return String(n).padStart(2, '0'); }
 
   function tick() {
-    const now = Date.now();
-    const diff = ceremonyDate - now;
-
-    if (diff <= 0) {
+    if (!ceremonyDate) {
+      countdownEl.style.display = 'none';
       cd.days.textContent = '00';
       cd.hours.textContent = '00';
       cd.minutes.textContent = '00';
@@ -679,6 +678,19 @@
       return;
     }
 
+    const now = Date.now();
+    const diff = ceremonyDate - now;
+
+    if (diff <= 0) {
+      countdownEl.style.display = 'flex';
+      cd.days.textContent = '00';
+      cd.hours.textContent = '00';
+      cd.minutes.textContent = '00';
+      cd.seconds.textContent = '00';
+      return;
+    }
+
+    countdownEl.style.display = 'flex';
     const d = Math.floor(diff / 86400000);
     const h = Math.floor((diff % 86400000) / 3600000);
     const m = Math.floor((diff % 3600000) / 60000);
